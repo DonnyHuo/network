@@ -2,7 +2,7 @@ import axios from "axios";
 
 // axios实例1
 const service = axios.create({
-  baseURL: "https://merchant-stage.uniwebpay.com/",
+  baseURL: "https://app.upnetwork.one/",
   timeout: 50000,
 });
 

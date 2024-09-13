@@ -2,24 +2,35 @@ import { Link } from "react-router-dom";
 import Footer from "../../components/footer";
 import { useEffect, useState } from "react";
 import service from "../../request";
-import { throttle } from "../../utils";
+import { throttle, shortStr } from "../../utils";
+import { message } from "antd";
 
 const Stake = () => {
-  const [value, setValue] = useState("1281279357536829440");
+  const [value, setValue] = useState("");
+  const [data, setData] = useState({});
 
-  useEffect(()=>{
-    getOrderId()
-  },[])
-
-  const getOrderId = (orderID) => {
-    service({
+  const getOrderId = async (orderID) => {
+    if (orderID == "" || orderID.length !== 19) {
+      return;
+    }
+    const data = await service({
       method: "get",
       url: "/zcloak-rest/zcloak/queryOrderId",
       params: {
         orderID: orderID,
       },
     });
+    if (data.code === "000000") {
+      setData(data.data);
+    } else {
+      setData({});
+      message.error(data.message);
+    }
   };
+
+  useEffect(() => {
+    getOrderId(value);
+  }, []);
 
   return (
     <div className="search">
@@ -47,24 +58,41 @@ const Stake = () => {
               />
             </div>
           </div>
-          <div className="w-1/2 m-auto text-disable mt-4 Regular text-xs">
-            You still have five search attempts available today.
-          </div>
-          <div className="mt-6 mx-10">
-            <p className="py-2 border-b border-solid border-disable">
-              UID: XXXXXXXXXX
-            </p>
-            <p className="py-2 border-b border-solid border-disable">
-              Created: XXXXXXXXXX
-            </p>
-            <p className="py-2 border-b border-solid border-disable">
-              Roothash: XXXXXXXXXX
-            </p>
-            <p className="py-2 border-b border-solid border-disable">
-              Attester: XXXXXXXXXX
-            </p>
-            <p className="py-2">Transaction ID: XXXXXXXXXX</p>
-          </div>
+          {data.total_amount ? (
+            <>
+              {/* <div className="w-1/2 m-auto text-disable mt-4 Regular text-xs">
+                You still have {data.total_amount} search attempts available
+                today.
+              </div> */}
+              <div className="mt-6 mx-10">
+                <p className="py-2 border-b border-solid border-disable">
+                  UID: {data.order_id}
+                </p>
+                <p className="py-2 border-b border-solid border-disable">
+                  Roothash:
+                  <a href={data.zkAttestationOnChainTxHashUrl} target="_blank">
+                    {shortStr(data.zk_attestation_on_chain_tx_hash)}
+                  </a>
+                </p>
+                <p className="py-2 border-b border-solid border-disable">
+                  Attester:
+                  <a
+                    href={data.dataAttestationOnChainTxHashUrl}
+                    target="_blank"
+                  >
+                    {shortStr(data.data_attestation_on_chain_tx_hash)}
+                  </a>
+                </p>
+                <p className="py-2 border-b border-solid border-disable">
+                  Amount: {data.total_amount}
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className="h-[100px] flex items-center justify-center">
+              No data
+            </div>
+          )}
 
           <div className="w-full absolute bottom-4">
             <Footer />

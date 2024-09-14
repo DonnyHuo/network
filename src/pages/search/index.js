@@ -58,7 +58,7 @@ const Stake = () => {
               />
             </div>
           </div>
-          {data.total_amount ? (
+          {!data.total_amount ? (
             <>
               {/* <div className="w-1/2 m-auto text-disable mt-4 Regular text-xs">
                 You still have {data.total_amount} search attempts available
@@ -70,13 +70,18 @@ const Stake = () => {
                 </p>
                 <p className="py-2 border-b border-solid border-disable">
                   Roothash:
-                  <a href={data.zkAttestationOnChainTxHashUrl} target="_blank">
+                  <a
+                    className="underline underline-offset-1"
+                    href={data.zkAttestationOnChainTxHashUrl}
+                    target="_blank"
+                  >
                     {shortStr(data.zk_attestation_on_chain_tx_hash)}
                   </a>
                 </p>
                 <p className="py-2 border-b border-solid border-disable">
                   Attester:
                   <a
+                    className="underline underline-offset-1"
                     href={data.dataAttestationOnChainTxHashUrl}
                     target="_blank"
                   >

@@ -11,7 +11,7 @@ const Stake = () => {
 
   const getOrderId = async (orderID) => {
     if (orderID == "" || orderID.length !== 19) {
-      return;
+      return setData('');
     }
     const data = await service({
       method: "get",
@@ -23,7 +23,7 @@ const Stake = () => {
     if (data.code === "000000") {
       setData(data.data);
     } else {
-      setData({});
+      setData('');
       message.error(data.message);
     }
   };
@@ -58,7 +58,7 @@ const Stake = () => {
               />
             </div>
           </div>
-          {data ? (
+          {data !== '' ? (
             <>
               {/* <div className="w-1/2 m-auto text-disable mt-4 Regular text-xs">
                 You still have {data.total_amount} search attempts available

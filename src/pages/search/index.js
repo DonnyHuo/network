@@ -58,7 +58,7 @@ const Stake = () => {
               />
             </div>
           </div>
-          {!data.total_amount ? (
+          {data ? (
             <>
               {/* <div className="w-1/2 m-auto text-disable mt-4 Regular text-xs">
                 You still have {data.total_amount} search attempts available

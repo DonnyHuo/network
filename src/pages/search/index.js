@@ -98,7 +98,6 @@ const Stake = () => {
               No data
             </div>
           )}
-
           <div className="w-full absolute bottom-4">
             <Footer />
           </div>
